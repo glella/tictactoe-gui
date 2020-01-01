@@ -31,12 +31,11 @@ pub fn draw_board(mb: &mut MeshBuilder) {
             graphics::BLACK,
         );
     }
-
 }
 
 
 pub fn draw_selected_cell(mb: &mut MeshBuilder, index_x: usize, index_y: usize) {
-    
+
     let red_color = graphics::Color::from_rgb_u32(0x00FF0000);
     let offset = 5.0;
     let width = 5.0;
@@ -80,7 +79,6 @@ pub fn draw_selected_cell(mb: &mut MeshBuilder, index_x: usize, index_y: usize) 
         width, 
         red_color,
     );
-
 }
 
 
@@ -99,7 +97,6 @@ pub fn draw_red_line(mb: &mut MeshBuilder, index_first: usize, index_second: usi
         10.0, 
         red_color,
     );
-
 }
 
 
@@ -111,9 +108,9 @@ pub fn draw_player_o(mb: &mut MeshBuilder, pos_x: usize, pos_y: usize) {
             BOARD_POS.1 + (pos_y as f32 + 0.5) * SQUARE_SIZE,),
         SQUARE_SIZE as f32 / 4.0,
         0.00001,
-        graphics::BLACK,
+        graphics::Color::from_rgb_u32(0xFFFF00),
+        //graphics::BLACK,
     );
-
 }
 
 
@@ -126,7 +123,7 @@ pub fn draw_player_x(mb: &mut MeshBuilder, pos_x: usize, pos_y: usize) {
                 BOARD_POS.1 + SQUARE_SIZE * (pos_y as f32 + 0.75),),
         ],
         4.0,
-        graphics::BLACK,
+        graphics::WHITE,
     );
 
     let _ = mb.line(
@@ -136,9 +133,8 @@ pub fn draw_player_x(mb: &mut MeshBuilder, pos_x: usize, pos_y: usize) {
                 BOARD_POS.1 + SQUARE_SIZE * (pos_y as f32 + 0.75),),
         ],
         4.0,
-        graphics::BLACK,
+        graphics::WHITE,
     );
-
 }
 
 
@@ -147,8 +143,7 @@ pub fn draw_player(mb: &mut MeshBuilder, player: Player, pos_x: usize, pos_y: us
     match player {
         Player::O => draw_player_o(mb, pos_x, pos_y),
         Player::X => draw_player_x(mb, pos_x, pos_y),
-    }
-    
+    } 
 }
 
 
@@ -157,7 +152,6 @@ pub fn draw_text(ctx: &mut Context, text: &str) {
     let display_text = Text::new(format!("Game: {}\nPress 'R' to restart", text));
 
     let _ = graphics::draw( ctx, &display_text, (Point2::new(0.0, WINDOW_SIZE.1 * 0.9), 
-        graphics::BLACK),
+        graphics::WHITE),
     );
-    
 }

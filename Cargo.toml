@@ -3,6 +3,9 @@ name = "tictactoe-gui"
 version = "0.1.0"
 authors = ["Guillermo Lella <arkorott@gmail.com>"]
 edition = "2018"
+description = "Simple tictactoe game in Rust with GUI using ggez library and Minimax algorithm with Alpha Beta pruning. GUI heavily inspired by Alexander Ovchinnikov's version."
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/glella/tictactoe-gui"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

@@ -1,3 +1,8 @@
+//! Strapped the GUI on top of a previous terminal (termion) based version
+//! and was too lazy to reactor all the game logic code. 
+//! So bolted everything on top of the existing Board structure
+//! instead of implementing a MainState struct for the game state
+//! separate from the Board struct. Sorry for the ugly code.
 
 use crate::drawing::*;
 
@@ -84,7 +89,17 @@ impl Board {
 
 
     pub fn next_player(&self) -> Player {
+        
         self.next_player
+    }
+
+
+    // available cells (with None)
+    fn available_cells(&self) -> bool {
+    	
+    	self.fields.iter().all(|row| {
+                row.iter().all(|cell| cell.is_some())
+        })
     }
 
 
@@ -92,10 +107,10 @@ impl Board {
         
         let game_state = self.get_winner(); 
         match &game_state {
+
             GameState::GameWon { player: _, cells: _ } => true,
-            _ => self.fields.iter().all(|row| {
-                        row.iter().all(|cell| cell.is_some())
-                }),
+
+            _ => self.available_cells(),
         }
     }
 
@@ -148,9 +163,8 @@ impl Board {
             }
         }
 
-        // if there are no empty cells (with None) return a Tie if not return InProgress
-        if self.fields.iter().all(|row| {
-                row.iter().all(|cell| cell.is_some()) }) {
+        // if there are no empty cells return a Tie if not return InProgress
+        if self.available_cells() {
             return GameState::Tie;
         } else {
             return GameState::InProgress;
@@ -205,8 +219,7 @@ impl Board {
     pub fn get_pointing_where_type(&self, x: f32, y: f32) -> PointingWhereType {
         
         if BOARD_POS.0 < x && x < BOARD_POS.0 + SQUARE_SIZE * BOARD_SIDE as f32
-            && BOARD_POS.1 < y
-            && y < BOARD_POS.1 + SQUARE_SIZE * BOARD_SIDE as f32 {
+            && BOARD_POS.1 < y && y < BOARD_POS.1 + SQUARE_SIZE * BOARD_SIDE as f32 {
 
             return PointingWhereType::InsideTheBoard;
         }
@@ -349,7 +362,7 @@ impl event::EventHandler for Board {
         }
     }
 
-    fn key_down_event(&mut self,_ctx: &mut Context, keycode: KeyCode, 
+    fn key_down_event(&mut self , _ctx: &mut Context, keycode: KeyCode, 
         _keymod: KeyMods, _repeat: bool,) {
 
         match keycode {
@@ -372,10 +385,11 @@ impl event::EventHandler for Board {
         }
     }
 
-    fn draw(&mut self, _ctx: &mut Context) -> GameResult {
+    fn draw(&mut self, ctx: &mut Context) -> GameResult {
 
         // clear the window
-        graphics::clear(_ctx, graphics::Color::from_rgb_u32(0xB0B0B0));
+        //graphics::clear(_ctx, graphics::Color::from_rgb_u32(0xB0B0B0));
+        graphics::clear(ctx, [0.1, 0.2, 0.3, 1.0].into());
 
         // draw stuff using a MeshBuilder
         let mb = &mut MeshBuilder::new();
@@ -411,14 +425,20 @@ impl event::EventHandler for Board {
         
         // draw the text
         let text = game_state_to_str(&game_state);
-        draw_text(_ctx, &text);
+        draw_text(ctx, &text);
         
-        let mbb = mb.build(_ctx)?;
-        ggez::graphics::draw(_ctx, &mbb, DrawParam::default())?;
+        // build the mesh
+        let mbb = mb.build(ctx)?;
+        ggez::graphics::draw(ctx, &mbb, DrawParam::default())?;
 
-        graphics::present(_ctx)?;
+        // flip the screen - switch buffer to screen
+        graphics::present(ctx)?;
 
+        // geez::timer signals OS it does not need all the CPU time just for this game
+        // prevents the game from using 100% CPU all the time
         ggez::timer::yield_now();
+
+        // returns an ok GameResult if no errors
         Ok(())
     }
 
