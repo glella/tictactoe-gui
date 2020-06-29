@@ -1,0 +1,38 @@
+Poner en el proyecto carpeta .cargo con un file llamado config para Windows y Linux con:
+
+mkdir .cargo
+
+echo -e "[target.x86_64-pc-windows-gnu]\nlinker = 'x86_64-w64-mingw32-gcc'\n\n[target.x86_64-unknown-linux-musl]\nlinker = 'x86_64-linux-musl-gcc'" > .cargo/config
+
+
+Windows: (volver a comentar la linea del bash_profile para linux):
+cargo build --target=x86_64-pc-windows-gnu
+
+Linux:
+Uncomment linea en el path que cambia el cc para linux:
+cargo build --target=x86_64-unknown-linux-musl
+
+Prior prep:
+
+Windows:
+Esto ya esta hecho pero por las dudas:
+brew install mingw-w64
+
+rustup target add x86_64-pc-windows-gnu
+
+cp /usr/local/Cellar/mingw-w64/7.0.0_1/toolchain-x86_64/x86_64-w64-mingw32/lib/{crt2.o,dllcrt2.o,libmsvcrt.a} ~/.rustup/toolchains/stable-x86_64-apple-darwin/lib/rustlib/x86_64-pc-windows-gnu/lib/
+
+
+Linux:
+Esto ya esta hecho pero por las dudas:
+rustup target add x86_64-unknown-linux-musl
+
+brew install FiloSottile/musl-cross/musl-cross
+
+Si app es con ggez no compila por el alsa sound lib. Compila perfecto en Linux directo si en linux instalas:
+apt install libasound2-dev libudev-dev pkg-config
+
+
+
+
+
