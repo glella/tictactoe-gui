@@ -6,5 +6,5 @@ TODO: need to dumb AI down so the AI is beatable and is more fun to play against
 
 Human player starts first with X. AI plays with O.
 
-GUI "heavily inspired" by Alexander Ovchinnikov's version
+GUI heavily inspired by Alexander Ovchinnikov's version
 
