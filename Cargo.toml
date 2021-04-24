@@ -1,6 +1,6 @@
 [package]
 name = "tictactoe-gui"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Guillermo Lella <arkorott@gmail.com>"]
 edition = "2018"
 description = "Simple tictactoe game in Rust with GUI using ggez library and Minimax algorithm with Alpha Beta pruning. GUI heavily inspired by Alexander Ovchinnikov's version."
